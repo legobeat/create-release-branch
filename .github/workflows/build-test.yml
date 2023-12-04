@@ -10,11 +10,13 @@ jobs:
     name: Prepare
     runs-on: ubuntu-latest
     outputs:
+      PACKAGE_NAME: ${{ steps.local-publish.outputs.package-name }}
+      PACKAGE_SHASUM: ${{ steps.local-publish.outputs.package-shasum }}
       YARN_CACHE_DIR: ${{ steps.yarn-cache-dir.outputs.YARN_CACHE_DIR }}
       YARN_VERSION: ${{ steps.yarn-version.outputs.YARN_VERSION }}
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x]
+        node-version: [18.x, 20.x]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -34,6 +36,13 @@ jobs:
           key: yarn-cache-${{ runner.os }}-${{ steps.yarn-version.outputs.YARN_VERSION }}-${{ hashFiles('yarn.lock') }}-${{ matrix.node-version }}
       - name: Install Yarn dependencies
         run: yarn --immutable
+      - uses: legobeat/npm-actions/publish@dev-multi
+        id: local-publish
+      - name: Cache package registry
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/_temp/_github_home/registry-data
+          key: yarn-cache-${{ steps.local-publish.outputs.package-name }}-${{ steps.local-publish.outputs.package-shasum }}
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -41,7 +50,7 @@ jobs:
       - prepare
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x]
+        node-version: [18.x, 20.x]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -62,6 +71,32 @@ jobs:
             echo "Working tree dirty at end of job"
             exit 1
           fi
+  compat:
+    name: Compat
+    runs-on: ubuntu-latest
+    needs:
+      - prepare
+    strategy:
+      matrix:
+        node-version: [16, 18, 20]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Resture package registry cache
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/_temp/_github_home/registry-data
+          key: yarn-cache-${{ needs.prepare.outputs.PACKAGE_NAME }}-${{ needs.prepare.outputs.PACKAGE_SHASUM }}
+      - uses: legobeat/npm-actions/compat-test@dev-multi
+        name: 'Install package as dependency using Node.js ${{ matrix.node-version }}'
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Require clean working directory
+        shell: bash
+        run: |
+          if ! git diff --exit-code -- . ':!.npmrc'; then
+            echo "Working tree dirty at end of job"
+            exit 1
+          fi
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -69,7 +104,7 @@ jobs:
       - prepare
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x]
+        node-version: [18.x]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -103,7 +138,7 @@ jobs:
       - prepare
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x]
+        node-version: [18.x]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -141,6 +176,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build
+      - compat
       - lint
       - test
       - check-workflows
