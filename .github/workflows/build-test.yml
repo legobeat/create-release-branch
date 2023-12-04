@@ -69,7 +69,20 @@ jobs:
       - prepare
     steps:
       - uses: actions/checkout@v3
-      - uses: legobeat/npm-actions/compat-test@dev
+      - uses: legobeat/npm-actions/publish@dev-multi
+        env:
+          VERDACCIO_STORAGE_PATH: /registry-data
+        id: local-publish
+      - name: Cache package registry
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.local-publish.outputs.registry-path }}
+          key: yarn-cache-${{ steps.local-publish.outputs.package-name }}-${{ steps.local-publish.outputs.package-shasum }}
+      - uses: legobeat/npm-actions/compat-test@dev-multi
+        with:
+          registry-path: ${{ steps.local-publish.outputs.registry-path }}
+        env:
+          VERDACCIO_STORAGE_PATH: ${{ steps.local-publish.outputs.registry-path }}
       - name: Require clean working directory
         shell: bash
         run: |
