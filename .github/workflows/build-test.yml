@@ -69,15 +69,15 @@ jobs:
       - prepare
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js v18
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18.x
       - name: Restore Yarn dependencies
         uses: actions/cache@v3
         with:
           path: ${{ needs.prepare.outputs.YARN_CACHE_DIR }}
-          key: yarn-cache-${{ runner.os }}-${{ needs.prepare.outputs.YARN_VERSION }}-${{ hashFiles('yarn.lock') }}-${{ matrix.node-version }}
+          key: yarn-cache-${{ runner.os }}-${{ needs.prepare.outputs.YARN_VERSION }}-${{ hashFiles('yarn.lock') }}-18.x
       - uses: legobeat/npm-actions/compat-test@dev
       - name: Require clean working directory
         shell: bash
