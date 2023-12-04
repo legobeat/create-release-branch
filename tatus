@@ -1,0 +1,570 @@
+GREP(1)                                  User Commands                                  GREP(1)
+
+[1mNAME[0m
+       grep, egrep, fgrep - print lines that match patterns
+
+[1mSYNOPSIS[0m
+       [1mgrep [22m[[4mOPTION[24m...] [4mPATTERNS[24m [[4mFILE[24m...]
+       [1mgrep [22m[[4mOPTION[24m...] [1m-e [4m[22mPATTERNS[24m ... [[4mFILE[24m...]
+       [1mgrep [22m[[4mOPTION[24m...] [1m-f [4m[22mPATTERN_FILE[24m ... [[4mFILE[24m...]
+
+[1mDESCRIPTION[0m
+       [1mgrep  [22msearches for [4mPATTERNS[24m in each [4mFILE[24m.  [4mPATTERNS[24m is one or more patterns separated by
+       newline characters, and [1mgrep  [22mprints  each  line  that  matches  a  pattern.   Typically
+       [4mPATTERNS[24m should be quoted when [1mgrep [22mis used in a shell command.
+
+       A  [4mFILE[24m  of  “[1m-[22m”  stands  for  standard  input.  If no [4mFILE[24m is given, recursive searches
+       examine the working directory, and nonrecursive searches read standard input.
+
+       In addition, the variant programs [1megrep [22mand [1mfgrep [22mare the same as [1mgrep -E  [22mand  [1mgrep -F[22m,
+       respectively.    These   variants   are   deprecated,  but  are  provided  for  backward
+       compatibility.
+
+[1mOPTIONS[0m
+   [1mGeneric Program Information[0m
+       [1m--help [22mOutput a usage message and exit.
+
+       [1m-V[22m, [1m--version[0m
+              Output the version number of [1mgrep [22mand exit.
+
+   [1mPattern Syntax[0m
+       [1m-E[22m, [1m--extended-regexp[0m
+              Interpret [4mPATTERNS[24m as extended regular expressions (EREs, see below).
+
+       [1m-F[22m, [1m--fixed-strings[0m
+              Interpret [4mPATTERNS[24m as fixed strings, not regular expressions.
+
+       [1m-G[22m, [1m--basic-regexp[0m
+              Interpret [4mPATTERNS[24m as basic regular expressions (BREs, see below).  This  is  the
+              default.
+
+       [1m-P[22m, [1m--perl-regexp[0m
+              Interpret  I<PATTERNS>  as  Perl-compatible  regular  expressions  (PCREs).  This
+              option is experimental when combined with the [1m-z [22m([1m--null-data[22m) option,  and  [1mgrep[0m
+              [1m-P [22mmay warn of unimplemented features.
+
+   [1mMatching Control[0m
+       [1m-e [4m[22mPATTERNS[24m, [1m--regexp=[4m[22mPATTERNS[0m
+              Use  [4mPATTERNS[24m  as  the  patterns.   If  this  option is used multiple times or is
+              combined with the [1m-f [22m([1m--file[22m) option, search for all patterns given.  This option
+              can be used to protect a pattern beginning with “-”.
+
+       [1m-f [4m[22mFILE[24m, [1m--file=[4m[22mFILE[0m
+              Obtain  patterns  from [4mFILE[24m, one per line.  If this option is used multiple times
+              or is combined with the [1m-e [22m([1m--regexp[22m) option, search for all patterns given.  The
+              empty file contains zero patterns, and therefore matches nothing.
+
+       [1m-i[22m, [1m--ignore-case[0m
+              Ignore  case  distinctions  in  patterns  and input data, so that characters that
+              differ only in case match each other.
+
+       [1m--no-ignore-case[0m
+              Do not ignore case distinctions in patterns and input data.  This is the default.
+              This option is useful for passing to shell scripts that already use [1m-i[22m, to cancel
+              its effects because the two options override each other.
+
+       [1m-v[22m, [1m--invert-match[0m
+              Invert the sense of matching, to select non-matching lines.
+
+       [1m-w[22m, [1m--word-regexp[0m
+              Select only those lines containing matches that form whole words.   The  test  is
+              that  the  matching  substring  must  either  be at the beginning of the line, or
+              preceded by a non-word constituent character.  Similarly, it must  be  either  at
+              the  end  of  the  line  or  followed by a non-word constituent character.  Word-
+              constituent characters are letters, digits, and the underscore.  This option  has
+              no effect if [1m-x [22mis also specified.
+
+       [1m-x[22m, [1m--line-regexp[0m
+              Select  only  those  matches  that  exactly  match the whole line.  For a regular
+              expression pattern, this is like parenthesizing the pattern and then  surrounding
+              it with [1m^ [22mand [1m$[22m.
+
+       [1m-y     [22mObsolete synonym for [1m-i[22m.
+
+   [1mGeneral Output Control[0m
+       [1m-c[22m, [1m--count[0m
+              Suppress  normal  output;  instead print a count of matching lines for each input
+              file.  With the [1m-v[22m, [1m--invert-match [22moption (see below), count non-matching lines.
+
+       [1m--color[22m[[1m=[4m[22mWHEN[24m], [1m--colour[22m[[1m=[4m[22mWHEN[24m]
+              Surround the matched (non-empty) strings, matching  lines,  context  lines,  file
+              names,  line  numbers,  byte  offsets,  and  separators (for fields and groups of
+              context lines) with escape sequences to display them in color  on  the  terminal.
+              The  colors  are defined by the environment variable [1mGREP_COLORS[22m.  The deprecated
+              environment variable [1mGREP_COLOR [22mis still supported, but its setting does not have
+              priority.  [4mWHEN[24m is [1mnever[22m, [1malways[22m, or [1mauto[22m.
+
+       [1m-L[22m, [1m--files-without-match[0m
+              Suppress  normal  output; instead print the name of each input file from which no
+              output would normally have been printed.
+
+       [1m-l[22m, [1m--files-with-matches[0m
+              Suppress normal output; instead print the name of  each  input  file  from  which
+              output  would  normally  have  been printed.  Scanning each input file stops upon
+              first match.
+
+       [1m-m [4m[22mNUM[24m, [1m--max-count=[4m[22mNUM[0m
+              Stop reading a file after [4mNUM[24m matching lines.  If the  input  is  standard  input
+              from  a  regular  file,  and [4mNUM[24m matching lines are output, [1mgrep [22mensures that the
+              standard input is positioned to just after the last matching line before exiting,
+              regardless  of  the  presence  of trailing context lines.  This enables a calling
+              process to resume a search.  When [1mgrep [22mstops after [4mNUM[24m matching lines, it outputs
+              any  trailing  context  lines.   When the [1m-c [22mor [1m--count [22moption is also used, [1mgrep[0m
+              does not output a count greater than [4mNUM[24m.  When the [1m-v [22mor  [1m--invert-match  [22moption
+              is also used, [1mgrep [22mstops after outputting [4mNUM[24m non-matching lines.
+
+       [1m-o[22m, [1m--only-matching[0m
+              Print  only the matched (non-empty) parts of a matching line, with each such part
+              on a separate output line.
+
+       [1m-q[22m, [1m--quiet[22m, [1m--silent[0m
+              Quiet; do not write anything to standard  output.   Exit  immediately  with  zero
+              status  if any match is found, even if an error was detected.  Also see the [1m-s [22mor
+              [1m--no-messages [22moption.
+
+       [1m-s[22m, [1m--no-messages[0m
+              Suppress error messages about nonexistent or unreadable files.
+
+   [1mOutput Line Prefix Control[0m
+       [1m-b[22m, [1m--byte-offset[0m
+              Print the 0-based byte offset within the input file before each line  of  output.
+              If  [1m-o  [22m([1m--only-matching[22m)  is  specified,  print  the offset of the matching part
+              itself.
+
+       [1m-H[22m, [1m--with-filename[0m
+              Print the file name for each match.  This is the default when there is more  than
+              one file to search.  This is a GNU extension.
+
+       [1m-h[22m, [1m--no-filename[0m
+              Suppress  the  prefixing of file names on output.  This is the default when there
+              is only one file (or only standard input) to search.
+
+       [1m--label=[4m[22mLABEL[0m
+              Display input actually coming from standard  input  as  input  coming  from  file
+              [4mLABEL[24m.   This  can be useful for commands that transform a file's contents before
+              searching, e.g., [1mgzip -cd foo.gz | grep --label=foo -H 'some pattern'[22m.  See  also
+              the [1m-H [22moption.
+
+       [1m-n[22m, [1m--line-number[0m
+              Prefix each line of output with the 1-based line number within its input file.
+
+       [1m-T[22m, [1m--initial-tab[0m
+              Make  sure that the first character of actual line content lies on a tab stop, so
+              that the alignment of tabs looks normal.  This is useful with options that prefix
+              their  output  to  the  actual  content:  [1m-H[22m,[1m-n[22m, and [1m-b[22m.  In order to improve the
+              probability that lines from a single file will all start at the same column, this
+              also  causes  the  line  number  and  byte offset (if present) to be printed in a
+              minimum size field width.
+
+       [1m-Z[22m, [1m--null[0m
+              Output a zero byte (the ASCII  [1mNUL  [22mcharacter)  instead  of  the  character  that
+              normally  follows  a  file name.  For example, [1mgrep -lZ [22moutputs a zero byte after
+              each file name instead of the  usual  newline.   This  option  makes  the  output
+              unambiguous,  even  in  the  presence of file names containing unusual characters
+              like newlines.  This option can be used with commands like [1mfind -print0[22m, [1mperl -0[22m,
+              [1msort  -z[22m,  and  [1mxargs -0 [22mto process arbitrary file names, even those that contain
+              newline characters.
+
+   [1mContext Line Control[0m
+       [1m-A [4m[22mNUM[24m, [1m--after-context=[4m[22mNUM[0m
+              Print [4mNUM[24m lines  of  trailing  context  after  matching  lines.   Places  a  line
+              containing a group separator ([1m--[22m) between contiguous groups of matches.  With the
+              [1m-o [22mor [1m--only-matching [22moption, this has no effect and a warning is given.
+
+       [1m-B [4m[22mNUM[24m, [1m--before-context=[4m[22mNUM[0m
+              Print [4mNUM[24m lines  of  leading  context  before  matching  lines.   Places  a  line
+              containing a group separator ([1m--[22m) between contiguous groups of matches.  With the
+              [1m-o [22mor [1m--only-matching [22moption, this has no effect and a warning is given.
+
+       [1m-C [4m[22mNUM[24m, [1m-[4m[22mNUM[24m, [1m--context=[4m[22mNUM[0m
+              Print [4mNUM[24m lines of output context.  Places a line containing  a  group  separator
+              ([1m--[22m)  between  contiguous  groups  of  matches.   With  the [1m-o [22mor [1m--only-matching[0m
+              option, this has no effect and a warning is given.
+
+       [1m--group-separator=[4m[22mSEP[0m
+              When [1m-A[22m, [1m-B[22m, or [1m-C [22mare in use, print [4mSEP[24m instead of [1m-- [22mbetween groups of lines.
+
+       [1m--no-group-separator[0m
+              When [1m-A[22m, [1m-B[22m, or [1m-C [22mare in use, do not print a separator between groups of lines.
+
+   [1mFile and Directory Selection[0m
+       [1m-a[22m, [1m--text[0m
+              Process  a  binary  file  as  if  it  were  text;  this  is  equivalent  to   the
+              [1m--binary-files=text [22moption.
+
+       [1m--binary-files=[4m[22mTYPE[0m
+              If  a file's data or metadata indicate that the file contains binary data, assume
+              that the file is of type [4mTYPE[24m.  Non-text bytes indicate binary  data;  these  are
+              either  output  bytes that are improperly encoded for the current locale, or null
+              input bytes when the [1m-z [22moption is not given.
+
+              By default, [4mTYPE[24m is [1mbinary[22m, and [1mgrep [22msuppresses output after  null  input  binary
+              data  is  discovered, and suppresses output lines that contain improperly encoded
+              data.  When some output is suppressed, [1mgrep [22mfollows any output  with  a  one-line
+              message saying that a binary file matches.
+
+              If  [4mTYPE[24m  is [1mwithout-match[22m, when [1mgrep [22mdiscovers null input binary data it assumes
+              that the rest of the file does not match; this is equivalent to the [1m-I [22moption.
+
+              If [4mTYPE[24m is [1mtext[22m, [1mgrep [22mprocesses a binary  file  as  if  it  were  text;  this  is
+              equivalent to the [1m-a [22moption.
+
+              When  [4mtype[24m  is  [1mbinary[22m,  [1mgrep  [22mmay  treat non-text bytes as line terminators even
+              without the [1m-z [22moption.  This means choosing [1mbinary [22mversus [1mtext [22mcan affect whether
+              a  pattern matches a file.  For example, when [4mtype[24m is [1mbinary [22mthe pattern [1mq$ might[0m
+              match [1mq [22mimmediately followed by a null byte, even though this is not matched when
+              [4mtype[24m  is  [1mtext[22m.  Conversely, when [4mtype[24m is [1mbinary [22mthe pattern [1m. [22m(period) might not
+              match a null byte.
+
+              [4mWarning:[24m The [1m-a [22moption might output binary garbage, which  can  have  nasty  side
+              effects if the output is a terminal and if the terminal driver interprets some of
+              it as commands.  On the other hand, when reading files whose text  encodings  are
+              unknown,  it can be helpful to use [1m-a [22mor to set [1mLC_ALL='C' [22min the environment, in
+              order to find more matches even if the matches are unsafe for direct display.
+
+       [1m-D [4m[22mACTION[24m, [1m--devices=[4m[22mACTION[0m
+              If an input file is a device, FIFO or socket,  use  [4mACTION[24m  to  process  it.   By
+              default,  [4mACTION[24m  is [1mread[22m, which means that devices are read just as if they were
+              ordinary files.  If [4mACTION[24m is [1mskip[22m, devices are silently skipped.
+
+       [1m-d [4m[22mACTION[24m, [1m--directories=[4m[22mACTION[0m
+              If an input file is a directory, use [4mACTION[24m to process it.  By default, [4mACTION[24m is
+              [1mread[22m,  i.e.,  read directories just as if they were ordinary files.  If [4mACTION[24m is
+              [1mskip[22m, silently skip directories.  If [4mACTION[24m is [1mrecurse[22m, read all files under each
+              directory,  recursively, following symbolic links only if they are on the command
+              line.  This is equivalent to the [1m-r [22moption.
+
+       [1m--exclude=[4m[22mGLOB[0m
+              Skip any command-line file with a name suffix  that  matches  the  pattern  [4mGLOB[24m,
+              using  wildcard  matching;  a name suffix is either the whole name, or a trailing
+              part that starts with a non-slash character immediately after a slash ([1m/[22m) in  the
+              name.  When searching recursively, skip any subfile whose base name matches [4mGLOB[24m;
+              the base name is the part after the last slash.  A pattern  can  use  [1m*[22m,  [1m?[22m,  and
+              [1m[[22m...[1m] [22mas wildcards, and [1m\ [22mto quote a wildcard or backslash character literally.
+
+       [1m--exclude-from=[4m[22mFILE[0m
+              Skip  files  whose  base  name  matches any of the file-name globs read from [4mFILE[0m
+              (using wildcard matching as described under [1m--exclude[22m).
+
+       [1m--exclude-dir=[4m[22mGLOB[0m
+              Skip any command-line directory with a name suffix that matches the pattern [4mGLOB[24m.
+              When  searching  recursively, skip any subdirectory whose base name matches [4mGLOB[24m.
+              Ignore any redundant trailing slashes in [4mGLOB[24m.
+
+       [1m-I     [22mProcess a binary file as if it did not contain matching data; this is  equivalent
+              to the [1m--binary-files=without-match [22moption.
+
+       [1m--include=[4m[22mGLOB[0m
+              Search  only  files  whose  base  name  matches  [4mGLOB[24m (using wildcard matching as
+              described under [1m--exclude[22m).  If contradictory [1m--include [22mand [1m--exclude [22moptions are
+              given, the last matching one wins.  If no [1m--include [22mor [1m--exclude [22moptions match, a
+              file is included unless the first such option is [1m--include[22m.
+
+       [1m-r[22m, [1m--recursive[0m
+              Read all files under each directory, recursively, following symbolic  links  only
+              if  they are on the command line.  Note that if no file operand is given, B<grep>
+              searches the working directory.  This is equivalent to the [1m-d recurse [22moption.
+
+       [1m-R[22m, [1m--dereference-recursive[0m
+              Read all files under each directory, recursively.   Follow  all  symbolic  links,
+              unlike [1m-r[22m.
+
+   [1mOther Options[0m
+       [1m--line-buffered[0m
+              Use line buffering on output.  This can cause a performance penalty.
+
+       [1m-U[22m, [1m--binary[0m
+              Treat  the  file(s)  as  binary.   By  default, under MS-DOS and MS-Windows, [1mgrep[0m
+              guesses whether a file is text or binary  as  described  for  the  [1m--binary-files[0m
+              option.   If  [1mgrep  [22mdecides  the file is a text file, it strips the CR characters
+              from the original file contents (to make regular expressions with [1m^  [22mand  [1m$  [22mwork
+              correctly).  Specifying [1m-U [22moverrules this guesswork, causing all files to be read
+              and passed to the matching mechanism verbatim; if the file is a  text  file  with
+              CR/LF  pairs at the end of each line, this will cause some regular expressions to
+              fail.  This option has no effect on platforms other than MS-DOS and MS-Windows.
+
+       [1m-z[22m, [1m--null-data[0m
+              Treat input and output data as sequences of lines, each terminated by a zero byte
+              (the  ASCII  NUL  character) instead of a newline.  Like the [1m-Z [22mor [1m--null [22moption,
+              this option can be used with commands like [1msort  -z  [22mto  process  arbitrary  file
+              names.
+
+[1mREGULAR EXPRESSIONS[0m
+       A  regular expression is a pattern that describes a set of strings.  Regular expressions
+       are constructed analogously to arithmetic expressions, by  using  various  operators  to
+       combine smaller expressions.
+
+       [1mgrep  [22munderstands  three different versions of regular expression syntax: “basic” (BRE),
+       “extended” (ERE) and “perl” (PCRE).  In GNU [1mgrep [22mthere is  no  difference  in  available
+       functionality  between  basic  and  extended  syntaxes.  In other implementations, basic
+       regular expressions are less powerful.  The following description  applies  to  extended
+       regular   expressions;   differences   for  basic  regular  expressions  are  summarized
+       afterwards.  Perl-compatible regular expressions give additional functionality, and  are
+       documented  in  B<pcresyntax>(3) and B<pcrepattern>(3), but work only if PCRE support is
+       enabled.
+
+       The fundamental building  blocks  are  the  regular  expressions  that  match  a  single
+       character.   Most  characters, including all letters and digits, are regular expressions
+       that match themselves.  Any  meta-character  with  special  meaning  may  be  quoted  by
+       preceding it with a backslash.
+
+       The  period  [1m.  [22mmatches  any  single character.  It is unspecified whether it matches an
+       encoding error.
+
+   [1mCharacter Classes and Bracket Expressions[0m
+       A [4mbracket[24m [4mexpression[24m is a list of characters enclosed by [1m[ [22mand [1m][22m.  It matches any single
+       character  in  that  list.   If  the  first character of the list is the caret [1m^ [22mthen it
+       matches any character [4mnot[24m in the list; it is unspecified whether it matches an  encoding
+       error.  For example, the regular expression [1m[0123456789] [22mmatches any single digit.
+
+       Within  a bracket expression, a [4mrange[24m [4mexpression[24m consists of two characters separated by
+       a hyphen.  It matches any single  character  that  sorts  between  the  two  characters,
+       inclusive, using the locale's collating sequence and character set.  For example, in the
+       default C locale, [1m[a-d] [22mis equivalent  to  [1m[abcd][22m.   Many  locales  sort  characters  in
+       dictionary  order,  and in these locales [1m[a-d] [22mis typically not equivalent to [1m[abcd][22m; it
+       might be equivalent to [1m[aBbCcDd][22m, for example.  To obtain the traditional interpretation
+       of  bracket  expressions,  you  can  use  the C locale by setting the [1mLC_ALL [22menvironment
+       variable to the value [1mC[22m.
+
+       Finally, certain named classes of characters are predefined within bracket  expressions,
+       as  follows.   Their  names  are  self  explanatory,  and they are [1m[:alnum:][22m, [1m[:alpha:][22m,
+       [1m[:blank:][22m, [1m[:cntrl:][22m, [1m[:digit:][22m, [1m[:graph:][22m, [1m[:lower:][22m, [1m[:print:][22m, [1m[:punct:][22m,  [1m[:space:][22m,
+       [1m[:upper:][22m,  and  [1m[:xdigit:][22m.   For  example,  [1m[[:alnum:]]  [22mmeans  the character class of
+       numbers and letters in the current locale.  In the C  locale  and  ASCII  character  set
+       encoding, this is the same as [1m[0-9A-Za-z][22m.  (Note that the brackets in these class names
+       are part of the symbolic names, and  must  be  included  in  addition  to  the  brackets
+       delimiting  the  bracket  expression.)   Most meta-characters lose their special meaning
+       inside bracket expressions.  To include  a  literal  [1m]  [22mplace  it  first  in  the  list.
+       Similarly,  to  include  a literal [1m^ [22mplace it anywhere but first.  Finally, to include a
+       literal [1m- [22mplace it last.
+
+   [1mAnchoring[0m
+       The caret [1m^ [22mand the dollar sign [1m$ [22mare meta-characters that respectively match the  empty
+       string at the beginning and end of a line.
+
+   [1mThe Backslash Character and Special Expressions[0m
+       The  symbols [1m\< [22mand [1m\> [22mrespectively match the empty string at the beginning and end of a
+       word.  The symbol [1m\b [22mmatches the empty string at the edge of a word, and [1m\B [22mmatches  the
+       empty  string  provided  it's [4mnot[24m at the edge of a word.  The symbol [1m\w [22mis a synonym for
+       [1m[_[:alnum:]] [22mand [1m\W [22mis a synonym for [1m[^_[:alnum:]][22m.
+
+   [1mRepetition[0m
+       A regular expression may be followed by one of several repetition operators:
+       [1m?      [22mThe preceding item is optional and matched at most once.
+       [1m*      [22mThe preceding item will be matched zero or more times.
+       [1m+      [22mThe preceding item will be matched one or more times.
+       [1m{[4m[22mn[24m[1m}    [22mThe preceding item is matched exactly [4mn[24m times.
+       [1m{[4m[22mn[24m[1m,}   [22mThe preceding item is matched [4mn[24m or more times.
+       [1m{,[4m[22mm[24m[1m}   [22mThe preceding item is matched at most [4mm[24m times.  This is a GNU extension.
+       [1m{[4m[22mn[24m[1m,[4m[22mm[24m[1m}  [22mThe preceding item is matched at least [4mn[24m times, but not more than [4mm[24m times.
+
+   [1mConcatenation[0m
+       Two regular expressions may be concatenated; the resulting  regular  expression  matches
+       any   string  formed  by  concatenating  two  substrings  that  respectively  match  the
+       concatenated expressions.
+
+   [1mAlternation[0m
+       Two regular expressions may be joined by the infix operator  [1m|[22m;  the  resulting  regular
+       expression matches any string matching either alternate expression.
+
+   [1mPrecedence[0m
+       Repetition  takes  precedence  over  concatenation,  which in turn takes precedence over
+       alternation.  A whole expression may  be  enclosed  in  parentheses  to  override  these
+       precedence rules and form a subexpression.
+
+   [1mBack-references and Subexpressions[0m
+       The  back-reference  [1m\[4m[22mn[24m,  where  [4mn[24m  is  a single digit, matches the substring previously
+       matched by the [4mn[24mth parenthesized subexpression of the regular expression.
+
+   [1mBasic vs Extended Regular Expressions[0m
+       In basic regular expressions the meta-characters [1m?[22m, [1m+[22m, [1m{[22m, [1m|[22m, [1m([22m, and [1m) [22mlose their special
+       meaning; instead use the backslashed versions [1m\?[22m, [1m\+[22m, [1m\{[22m, [1m\|[22m, [1m\([22m, and [1m\)[22m.
+
+[1mEXIT STATUS[0m
+       Normally  the exit status is 0 if a line is selected, 1 if no lines were selected, and 2
+       if an error occurred.  However, if the [1m-q [22mor [1m--quiet [22mor [1m--silent [22mis used and a  line  is
+       selected, the exit status is 0 even if an error occurred.
+
+[1mENVIRONMENT[0m
+       The behavior of [1mgrep [22mis affected by the following environment variables.
+
+       The locale for category [1mLC_[4m[22mfoo[24m is specified by examining the three environment variables
+       [1mLC_ALL[22m, [1mLC_[4m[22mfoo[24m, [1mLANG[22m, in that order.  The first of these variables that is set specifies
+       the  locale.   For  example, if [1mLC_ALL [22mis not set, but [1mLC_MESSAGES [22mis set to [1mpt_BR[22m, then
+       the Brazilian Portuguese locale is used for the [1mLC_MESSAGES [22mcategory.  The C  locale  is
+       used  if  none  of  these  environment  variables  are set, if the locale catalog is not
+       installed, or if [1mgrep [22mwas not compiled with national language support (NLS).  The  shell
+       command [1mlocale -a [22mlists locales that are currently available.
+
+       [1mGREP_COLOR[0m
+              This variable specifies the color used to highlight matched (non-empty) text.  It
+              is deprecated in favor of [1mGREP_COLORS[22m, but still supported.  The [1mmt[22m, [1mms[22m,  and  [1mmc[0m
+              capabilities of [1mGREP_COLORS [22mhave priority over it.  It can only specify the color
+              used to highlight the matching non-empty text in any matching  line  (a  selected
+              line  when  the  [1m-v  [22mcommand-line option is omitted, or a context line when [1m-v [22mis
+              specified).  The default is [1m01;31[22m, which means a bold red foreground text on  the
+              terminal's default background.
+
+       [1mGREP_COLORS[0m
+              Specifies  the colors and other attributes used to highlight various parts of the
+              output.  Its value is a colon-separated list of  capabilities  that  defaults  to
+              [1mms=01;31:mc=01;31:sl=:cx=:fn=35:ln=32:bn=32:se=36  [22mwith  the  [1mrv  [22mand  [1mne [22mboolean
+              capabilities omitted (i.e., false).  Supported capabilities are as follows.
+
+              [1msl=    [22mSGR substring for whole selected lines (i.e., matching lines when  the  [1m-v[0m
+                     command-line   option  is  omitted,  or  non-matching  lines  when  [1m-v  [22mis
+                     specified).  If however the boolean [1mrv [22mcapability and the [1m-v  [22mcommand-line
+                     option  are  both specified, it applies to context matching lines instead.
+                     The default is empty (i.e., the terminal's default color pair).
+
+              [1mcx=    [22mSGR substring for whole context lines (i.e., non-matching lines  when  the
+                     [1m-v   [22mcommand-line  option  is  omitted,  or  matching  lines  when  [1m-v  [22mis
+                     specified).  If however the boolean [1mrv [22mcapability and the [1m-v  [22mcommand-line
+                     option  are  both  specified,  it  applies  to selected non-matching lines
+                     instead.  The default is empty (i.e., the terminal's default color pair).
+
+              [1mrv     [22mBoolean value that reverses (swaps)  the  meanings  of  the  [1msl=  [22mand  [1mcx=[0m
+                     capabilities when the [1m-v [22mcommand-line option is specified.  The default is
+                     false (i.e., the capability is omitted).
+
+              [1mmt=01;31[0m
+                     SGR substring for matching non-empty text in any matching  line  (i.e.,  a
+                     selected  line  when  the  [1m-v [22mcommand-line option is omitted, or a context
+                     line when [1m-v [22mis specified).  Setting this is equivalent  to  setting  both
+                     [1mms=  [22mand  [1mmc=  [22mat  once to the same value.  The default is a bold red text
+                     foreground over the current line background.
+
+              [1mms=01;31[0m
+                     SGR substring for matching non-empty text in a selected  line.   (This  is
+                     only  used when the [1m-v [22mcommand-line option is omitted.)  The effect of the
+                     [1msl= [22m(or [1mcx= [22mif [1mrv[22m) capability remains active  when  this  kicks  in.   The
+                     default is a bold red text foreground over the current line background.
+
+              [1mmc=01;31[0m
+                     SGR  substring  for  matching  non-empty text in a context line.  (This is
+                     only used when the [1m-v [22mcommand-line option is specified.)   The  effect  of
+                     the  [1mcx= [22m(or [1msl= [22mif [1mrv[22m) capability remains active when this kicks in.  The
+                     default is a bold red text foreground over the current line background.
+
+              [1mfn=35  [22mSGR substring for file names prefixing any content line.  The default is a
+                     magenta text foreground over the terminal's default background.
+
+              [1mln=32  [22mSGR substring for line numbers prefixing any content line.  The default is
+                     a green text foreground over the terminal's default background.
+
+              [1mbn=32  [22mSGR substring for byte offsets prefixing any content line.  The default is
+                     a green text foreground over the terminal's default background.
+
+              [1mse=36  [22mSGR  substring  for  separators  that  are  inserted between selected line
+                     fields ([1m:[22m), between context  line  fields,  ([1m-[22m),  and  between  groups  of
+                     adjacent  lines  when nonzero context is specified ([1m--[22m).  The default is a
+                     cyan text foreground over the terminal's default background.
+
+              [1mne     [22mBoolean value that prevents clearing to the end of  line  using  Erase  in
+                     Line  (EL)  to  Right  ([1m\33[K[22m)  each  time a colorized item ends.  This is
+                     needed on terminals on which EL is not supported.  It is otherwise  useful
+                     on  terminals  for  which  the  [1mback_color_erase  [22m([1mbce[22m)  boolean  terminfo
+                     capability does not apply, when the chosen highlight colors do not  affect
+                     the  background,  or  when EL is too slow or causes too much flicker.  The
+                     default is false (i.e., the capability is omitted).
+
+              Note that boolean capabilities have no [1m=[22m... part.  They are omitted (i.e., false)
+              by default and become true when specified.
+
+              See  the  Select Graphic Rendition (SGR) section in the documentation of the text
+              terminal that is used  for  permitted  values  and  their  meaning  as  character
+              attributes.   These  substring  values are integers in decimal representation and
+              can be concatenated with semicolons.  [1mgrep [22mtakes care of  assembling  the  result
+              into  a complete SGR sequence ([1m\33[[22m...[1mm[22m).  Common values to concatenate include [1m1[0m
+              for bold, [1m4 [22mfor underline, [1m5 [22mfor blink, [1m7 [22mfor inverse, [1m39 [22mfor default  foreground
+              color,  [1m30  [22mto  [1m37  [22mfor  foreground colors, [1m90 [22mto [1m97 [22mfor 16-color mode foreground
+              colors, [1m38;5;0 [22mto [1m38;5;255 [22mfor 88-color and 256-color modes foreground colors, [1m49[0m
+              for  default  background  color,  [1m40  [22mto [1m47 [22mfor background colors, [1m100 [22mto [1m107 [22mfor
+              16-color mode  background  colors,  and  [1m48;5;0  [22mto  [1m48;5;255  [22mfor  88-color  and
+              256-color modes background colors.
+
+       [1mLC_ALL[22m, [1mLC_COLLATE[22m, [1mLANG[0m
+              These  variables specify the locale for the [1mLC_COLLATE [22mcategory, which determines
+              the collating sequence used to interpret range expressions like [1m[a-z][22m.
+
+       [1mLC_ALL[22m, [1mLC_CTYPE[22m, [1mLANG[0m
+              These variables specify the locale for the [1mLC_CTYPE  [22mcategory,  which  determines
+              the  type  of  characters,  e.g., which characters are whitespace.  This category
+              also determines the character encoding, that  is,  whether  text  is  encoded  in
+              UTF-8,  ASCII,  or some other encoding.  In the C or POSIX locale, all characters
+              are encoded as a single byte and every byte is a valid character.
+
+       [1mLC_ALL[22m, [1mLC_MESSAGES[22m, [1mLANG[0m
+              These variables specify the locale for the [1mLC_MESSAGES [22mcategory, which determines
+              the  language  that  [1mgrep  [22muses for messages.  The default C locale uses American
+              English messages.
+
+       [1mPOSIXLY_CORRECT[0m
+              If set, [1mgrep [22mbehaves as POSIX requires; otherwise, [1mgrep [22mbehaves more  like  other
+              GNU programs.  POSIX requires that options that follow file names must be treated
+              as file names; by default, such options are permuted to the front of the  operand
+              list  and are treated as options.  Also, POSIX requires that unrecognized options
+              be diagnosed as “illegal”, but since they are not  really  against  the  law  the
+              default  is  to  diagnose  them  as  “invalid”.   [1mPOSIXLY_CORRECT  [22malso  disables
+              [1m_[4m[22mN[24m[1m_GNU_nonoption_argv_flags_[22m, described below.
+
+       [1m_[4m[22mN[24m[1m_GNU_nonoption_argv_flags_[0m
+              (Here [4mN[24m is [1mgrep[22m's numeric process ID.)  If the [4mi[24mth character of this  environment
+              variable's  value  is [1m1[22m, do not consider the [4mi[24mth operand of [1mgrep [22mto be an option,
+              even if it appears to be one.  A shell can put this variable in  the  environment
+              for  each command it runs, specifying which operands are the results of file name
+              wildcard expansion and therefore should not be treated as options.  This behavior
+              is  available  only  with the GNU C library, and only when [1mPOSIXLY_CORRECT [22mis not
+              set.
+
+[1mNOTES[0m
+       This man page is maintained only fitfully; the full documentation is often  more  up-to-
+       date.
+
+[1mCOPYRIGHT[0m
+       Copyright 1998-2000, 2002, 2005-2021 Free Software Foundation, Inc.
+
+       This is free software; see the source for copying conditions.  There is NO warranty; not
+       even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+[1mBUGS[0m
+   [1mReporting Bugs[0m
+       Email bug reports to the bug-reporting address  ⟨bug-grep@gnu.org⟩.   An  email  archive
+       ⟨https://lists.gnu.org/mailman/listinfo/bug-grep⟩       and      a      bug      tracker
+       ⟨https://debbugs.gnu.org/cgi/pkgreport.cgi?package=grep⟩ are available.
+
+   [1mKnown Bugs[0m
+       Large repetition counts in the [1m{[4m[22mn[24m[1m,[4m[22mm[24m[1m} [22mconstruct may cause [1mgrep [22mto use lots of memory.  In
+       addition,  certain other obscure regular expressions require exponential time and space,
+       and may cause [1mgrep [22mto run out of memory.
+
+       Back-references are very slow, and may require exponential time.
+
+[1mEXAMPLE[0m
+       The following example outputs the location and contents of any line containing  “f”  and
+       ending  in  “.c”,  within all files in the current directory whose names contain “g” and
+       end in “.h”.  The [1m-n [22moption outputs line numbers, the [1m-- [22margument treats  expansions  of
+       “*g*.h” starting with “-” as file names not options, and the empty file /dev/null causes
+       file names to be output even if only one file name happens to be of the form “*g*.h”.
+
+         $ [1mgrep [22m-n -- 'f.*\.c$' *g*.h /dev/null
+         argmatch.h:1:/* definitions and prototypes for argmatch.c
+
+       The only line that matches is line 1 of argmatch.h.  Note that  the  regular  expression
+       syntax used in the pattern differs from the globbing syntax that the shell uses to match
+       file names.
+
+[1mSEE ALSO[0m
+   [1mRegular Manual Pages[0m
+       [1mawk[22m(1), [1mcmp[22m(1), [1mdiff[22m(1), [1mfind[22m(1), [1mperl[22m(1), [1msed[22m(1), [1msort[22m(1), [1mxargs[22m(1), [1mread[22m(2),  [1mpcre[22m(3),
+       [1mpcresyntax[22m(3), [1mpcrepattern[22m(3), [1mterminfo[22m(5), [1mglob[22m(7), [1mregex[22m(7)
+
+   [1mFull Documentation[0m
+       A complete manual ⟨https://www.gnu.org/software/grep/manual/⟩ is available.  If the [1minfo[0m
+       and [1mgrep [22mprograms are properly installed at your site, the command
+
+              [1minfo grep[0m
+
+       should give you access to the complete manual.
+
+GNU grep 3.7                               2019-12-29                                   GREP(1)
