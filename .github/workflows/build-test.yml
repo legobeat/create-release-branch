@@ -74,7 +74,7 @@ jobs:
       - name: Cache package registry
         uses: actions/cache@v3
         with:
-          path: ${{ steps.local-publish.outputs.registry-path }}
+          path: /home/runner/work/_temp/_github_home/registry-data
           key: yarn-cache-${{ steps.local-publish.outputs.package-name }}-${{ steps.local-publish.outputs.package-shasum }}
       - uses: legobeat/npm-actions/compat-test@dev-multi
       - name: Require clean working directory
